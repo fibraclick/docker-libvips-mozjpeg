@@ -8,7 +8,7 @@ ENV LD_LIBRARY_PATH /usr/local/lib
 
 ARG MOZJPEG_VERSION=4.0.3
 ARG MOZJPEG_URL=https://github.com/mozilla/mozjpeg/archive
-ARG VIPS_VERSION=8.11.0
+ARG VIPS_VERSION=8.11.3
 ARG VIPS_URL=https://github.com/libvips/libvips/releases/download
 
 WORKDIR /usr/local/src
@@ -27,8 +27,7 @@ RUN apt-get update \
 # Libs needed by mozjpeg
 RUN apt-get install -y \
     libpng-dev \
-    zlib1g-dev \
-    libheif-dev
+    zlib1g-dev
 
 # Download mozjpeg
 RUN wget ${MOZJPEG_URL}/v${MOZJPEG_VERSION}.tar.gz \
@@ -50,7 +49,8 @@ RUN apt-get install -y \
     libgif-dev \
     libexif-dev \
     liblcms2-dev \
-    liborc-dev 
+    liborc-dev \
+    libheif-dev
 
 # Download libvips
 RUN cd /usr/local/src \
@@ -62,8 +62,3 @@ RUN cd /usr/local/src/vips-${VIPS_VERSION} \
     && CFLAGS=-O3 CXXFLAGS=-O3 ./configure \
     && make V=0 \
     && make install
-
-WORKDIR /data
-
-ENTRYPOINT ["/usr/local/bin/vipsthumbnail"]
-CMD ["--help"]
